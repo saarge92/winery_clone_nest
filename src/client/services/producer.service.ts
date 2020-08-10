@@ -19,4 +19,8 @@ export class ProducerService {
     createdProducer.name = producerDto.name;
     return await this.producerRepository.save(createdProducer);
   }
+
+  public async getProducerById(id: string): Promise<ProducerEntity> {
+    return await this.producerRepository.findOne(id);
+  }
 }
