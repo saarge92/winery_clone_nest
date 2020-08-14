@@ -7,12 +7,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm/index';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', nullable: false, length: 255 })
+  @Column({ type: 'varchar', nullable: false, length: 255, unique: true })
   email: string;
 
   @Column({ type: 'varchar', nullable: false, length: 255 })
