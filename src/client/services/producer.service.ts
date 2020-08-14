@@ -29,7 +29,7 @@ export class ProducerService implements IProducerService {
     return of(paginatedProducerList);
   }
 
-  public async createdProducer(producerDto: ProducerDto): Promise<ProducerEntity> {
+  public async createProducer(producerDto: ProducerDto): Promise<ProducerEntity> {
     const createdProducer = this.producerRepository.create();
     createdProducer.name = producerDto.name;
     return await this.producerRepository.save(createdProducer);

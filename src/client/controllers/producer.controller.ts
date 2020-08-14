@@ -33,7 +33,7 @@ export class ProducerController {
    */
   @Post('/')
   public async createProducer(@Body()producerDto: ProducerDto): Promise<ProducerEntity> {
-    return await this.producerService.createdProducer(producerDto);
+    return await this.producerService.createProducer(producerDto);
   }
 
   /**
