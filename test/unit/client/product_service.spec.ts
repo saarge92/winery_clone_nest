@@ -31,12 +31,20 @@ describe('Product Service test', () => {
     producerService = module.get<ProducerService>(PRODUCER_SERVICE);
   });
 
-  it('Create producer', async () => {
+  it('Test create producer', async () => {
     const createData = {
       name: 'Vina',
     };
     const createdProducer = await producerService.createProducer(createData);
     expect(true).toBe(createdProducer instanceof ProducerEntity);
+  });
+
+  it('Test get list of producers', async () => {
+    const listOfProducers = await (await (producerService.getListOfProducers())).toPromise();
+    expect(listOfProducers).toBeDefined();
+    if (listOfProducers.length > 0) {
+      expect(true).toBe(listOfProducers[0] instanceof ProducerEntity);
+    }
   });
 
   afterAll(() => {
