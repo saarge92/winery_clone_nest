@@ -5,11 +5,13 @@ import { AuthService } from './services/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './controllers/auth.controller';
-import { UserService } from './services/user.service';
 import { AuthProvider } from './auth.provider';
+import { RoleService } from './services/role.service';
+import { UserRole } from '../entities/user_role.entity';
+import { Role } from '../entities/role.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]),
+  imports: [TypeOrmModule.forFeature([User, UserRole, Role]),
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -22,7 +24,7 @@ import { AuthProvider } from './auth.provider';
       }),
     }),
   ],
-  providers: [AuthService, ...AuthProvider],
+  providers: [AuthService, ...AuthProvider, RoleService],
   controllers: [AuthController],
   exports: [...AuthProvider],
 })

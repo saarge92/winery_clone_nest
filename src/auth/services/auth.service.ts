@@ -6,6 +6,7 @@ import { compare } from 'bcrypt';
 import { IUserService } from '../interfaces/user_service.interface';
 import { USER_SERVICE } from '../constants/auth.constants';
 import { IAuthService } from '../interfaces/auth_service.interface';
+import { RoleService } from './role.service';
 
 /**
  * Service for authorization/authentication users in our system
@@ -15,7 +16,8 @@ import { IAuthService } from '../interfaces/auth_service.interface';
 export class AuthService implements IAuthService {
 
   constructor(private readonly jwtService: JwtService,
-              @Inject(USER_SERVICE) private readonly userService: IUserService) {
+              @Inject(USER_SERVICE) private readonly userService: IUserService,
+              private readonly roleService: RoleService) {
   }
 
   /**
@@ -25,6 +27,7 @@ export class AuthService implements IAuthService {
    */
   public async registerUser(userRegisterDto: UserRegisterDto): Promise<any> {
     const createdUser = await this.userService.createUser(userRegisterDto);
+    await this.roleService.addUserToRole('User', createdUser.id);
     const token = await this.jwtService.signAsync({ user: createdUser.email, name: createdUser.name });
     return {
       email: createdUser.email,

@@ -2,10 +2,11 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity,
+  Entity, JoinTable,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm/index';
+import { Role } from './role.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,6 +21,14 @@ export class User {
 
   @Column({ type: 'varchar', nullable: false, length: 255 })
   password: string;
+
+  @JoinTable({
+    name: 'user_in_roles', joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+  })
+  roles: Role[];
 
   @CreateDateColumn()
   created_at: Date;
