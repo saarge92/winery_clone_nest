@@ -1,5 +1,5 @@
 import { IProducerService } from '../../../src/client/intefaces/producer_service.interface';
-import { getConnection, Repository } from 'typeorm/index';
+import { getConnection, getRepository, Repository } from 'typeorm/index';
 import { ProducerEntity } from '../../../src/entities/producer.entity';
 import { TestingModule, Test } from '@nestjs/testing';
 import { ClientProvider } from '../../../src/client/client.provider';
@@ -8,9 +8,11 @@ import { PRODUCER_SERVICE } from '../../../src/client/constants/client.constants
 import { connectionName, connectionParameters } from '../../connections/connection';
 import { ProducerService } from '../../../src/client/services/producer.service';
 import { ClientModule } from '../../../src/client/client.module';
+import * as fakerStatic from 'faker';
 
 describe('Product Service test', () => {
   let producerService: IProducerService;
+  let producerRepository: Repository<ProducerEntity>;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,9 +31,10 @@ describe('Product Service test', () => {
       ],
     }).compile();
     producerService = module.get<ProducerService>(PRODUCER_SERVICE);
+    producerRepository = getRepository(ProducerEntity);
   });
 
-  it('Test create producer', async () => {
+  it('Should return created producer', async () => {
     const createData = {
       name: 'Vina',
     };
@@ -39,12 +42,22 @@ describe('Product Service test', () => {
     expect(true).toBe(createdProducer instanceof ProducerEntity);
   });
 
-  it('Test get list of producers', async () => {
+  it('Should return list of producers', async () => {
     const listOfProducers = await (await (producerService.getListOfProducers())).toPromise();
     expect(listOfProducers).toBeDefined();
     if (listOfProducers.length > 0) {
       expect(true).toBe(listOfProducers[0] instanceof ProducerEntity);
     }
+  });
+
+  it('Should update users', async () => {
+    const randomProducer = await producerRepository.createQueryBuilder()
+      .orderBy('RAND()').getOne();
+    const updateParams = {
+      name: fakerStatic.company.companyName(),
+    };
+    const updatedData = await producerService.updateProducerById(randomProducer.id, updateParams);
+    expect(true).toBe(updatedData instanceof ProducerEntity);
   });
 
   afterAll(() => {
