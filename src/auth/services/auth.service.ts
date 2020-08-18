@@ -4,9 +4,13 @@ import { UserRegisterDto } from '../dto/register_user.dto';
 import { LoginUserDto } from '../dto/login_user.dto';
 import { compare } from 'bcrypt';
 import { IUserService } from '../interfaces/user_service.interface';
-import { USER_SERVICE } from '../constants/auth.constants';
+import { ROLE_SERVICE, USER_SERVICE } from '../constants/auth.constants';
 import { IAuthService } from '../interfaces/auth_service.interface';
-import { RoleService } from './role.service';
+import { IRoleService } from '../interfaces/role_service.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from '../../entities/role.entity';
+import { Repository } from 'typeorm/index';
+import { IAuthUserResponse } from '../responses/user_auth.response';
 
 /**
  * Service for authorization/authentication users in our system
@@ -16,8 +20,9 @@ import { RoleService } from './role.service';
 export class AuthService implements IAuthService {
 
   constructor(private readonly jwtService: JwtService,
+              @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
               @Inject(USER_SERVICE) private readonly userService: IUserService,
-              private readonly roleService: RoleService) {
+              @Inject(ROLE_SERVICE) private readonly roleService: IRoleService) {
   }
 
   /**
@@ -25,13 +30,23 @@ export class AuthService implements IAuthService {
    * @param userRegisterDto Data object about user
    * @return {Promise<any>} Returns token & user data
    */
-  public async registerUser(userRegisterDto: UserRegisterDto): Promise<any> {
+  public async registerUser(userRegisterDto: UserRegisterDto): Promise<IAuthUserResponse> {
+    const userRoleExist = await this.roleRepository.findOne({ name: 'User' });
+    if (!userRoleExist)
+      throw new ConflictException('Невозможно добавить вам права пользователя. Обратитесь к администратору');
+
     const createdUser = await this.userService.createUser(userRegisterDto);
     await this.roleService.addUserToRole('User', createdUser.id);
+
     const token = await this.jwtService.signAsync({ user: createdUser.email, name: createdUser.name });
+
+    let roles = await this.roleService.getRolesOfUser(createdUser.id);
+    if (roles) roles = roles.map(role => role.name);
+
     return {
       email: createdUser.email,
       name: createdUser.name,
+      roles,
       token,
     };
   }
@@ -40,7 +55,7 @@ export class AuthService implements IAuthService {
    * Login user in our system
    * @param loginDto Data object about user
    */
-  public async loginUser(loginDto: LoginUserDto) {
+  public async loginUser(loginDto: LoginUserDto): Promise<IAuthUserResponse> {
     const user = await this.userService.getUserByEmail(loginDto.email);
     if (!user)
       throw new ConflictException('Неправильный логин или пароль');
@@ -50,10 +65,14 @@ export class AuthService implements IAuthService {
       throw new ConflictException('Неправильный логин или пароль');
 
     const token = await this.jwtService.signAsync({ user: user.email, name: user.name });
+    let roles = await this.roleService.getRolesOfUser(user.id);
+    if (roles) roles = roles.map(role => role.name);
+
     return {
       email: user.email,
       name: user.name,
       token,
+      roles,
     };
   }
 }

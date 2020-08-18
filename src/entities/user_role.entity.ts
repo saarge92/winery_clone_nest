@@ -1,7 +1,7 @@
 import {
   Column,
   CreateDateColumn, DeleteDateColumn,
-  Entity,
+  Entity, Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -15,20 +15,21 @@ export class UserRole {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(type => User,
-    { onDelete: 'SET NULL', onUpdate: 'CASCADE', eager: false })
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  @ManyToOne(() => User, { onDelete: 'SET NULL', onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(type => Role, { onUpdate: 'CASCADE', onDelete: 'SET NULL', eager: false })
-  @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
+  @ManyToOne(() => Role,
+    { onDelete: 'SET NULL', onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'role_id' })
   role: Role;
 
-  @Column({ name: 'user_id', nullable: true })
+  @Column({ name: 'user_id', nullable: true, type: 'varchar' })
+  @Index()
   user_id: string;
 
-
-  @Column({ name: 'role_id', nullable: true })
+  @Column({ name: 'role_id', nullable: true, type: 'varchar',})
+  @Index()
   role_id: string;
 
   @CreateDateColumn()

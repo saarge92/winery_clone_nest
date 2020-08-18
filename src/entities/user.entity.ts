@@ -2,7 +2,7 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity, JoinTable,
+  Entity, JoinTable, ManyToMany, OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm/index';
@@ -13,22 +13,14 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', nullable: false, length: 255, unique: true })
+  @Column({ type: 'varchar', nullable: false, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', nullable: false, length: 255 })
+  @Column({ type: 'varchar', nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', nullable: false, length: 255 })
+  @Column({ type: 'varchar', nullable: false })
   password: string;
-
-  @JoinTable({
-    name: 'user_in_roles', joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-  })
-  roles: Role[];
 
   @CreateDateColumn()
   created_at: Date;
