@@ -1,9 +1,13 @@
-import { Body, ConflictException, Controller, Get, Inject, Param, Post, Put, Req } from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, Inject, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ProducerEntity } from '../../entities/producer.entity';
 import { ProducerDto } from '../dto/producer.dto';
 import { IProducerService } from '../intefaces/producer_service.interface';
 import { PRODUCER_SERVICE } from '../constants/client.constants';
 import { Request } from 'express';
+import { Roles } from '../../auth/decorators/role.decorator';
+import { JwtStrategy } from '../../auth/strategies/jwt.strategy';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 /**
  * Controller for serving requests about producers
@@ -32,6 +36,8 @@ export class ProducerController {
    * @return {ProducerEntity} Вернет созданного производителя
    */
   @Post('/')
+  @Roles('Admin')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async createProducer(@Body()producerDto: ProducerDto): Promise<ProducerEntity> {
     return await this.producerService.createProducer(producerDto);
   }
