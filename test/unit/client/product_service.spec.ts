@@ -9,6 +9,7 @@ import { connectionName, connectionParameters } from '../../connections/connecti
 import { ProducerService } from '../../../src/client/services/producer.service';
 import { ClientModule } from '../../../src/client/client.module';
 import * as fakerStatic from 'faker';
+import { Color } from '../../../src/entities/color.entity';
 
 describe('Product Service test', () => {
   let producerService: IProducerService;
@@ -18,7 +19,7 @@ describe('Product Service test', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot({
         ...connectionParameters,
-        entities: [ProducerEntity],
+        entities: [ProducerEntity, Color],
       }),
         ClientModule,
       ],
@@ -26,6 +27,10 @@ describe('Product Service test', () => {
         ...ClientProvider,
         {
           provide: getRepositoryToken(ProducerEntity),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Color),
           useClass: Repository,
         },
       ],

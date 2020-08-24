@@ -48,4 +48,24 @@ export class ColorService implements IColorService {
       throw new ConflictException('Такой цвет не найден в системе');
     await this.colorRepository.delete({ id });
   }
+
+  /**
+   * Update exist color in our system
+   * @param id Id of updating color
+   * @param colorDto Data Transfer object about updating color in our system
+   * @returns {Promise<Color>} Returns asynchronously updated color in our system
+   */
+  public async updateColor(id: string, colorDto: ColorDto): Promise<Color> {
+    const existColor = await this.colorRepository.findOne(id);
+    if (!existColor)
+      throw new ConflictException('Цвет с таким id не найден');
+
+    existColor.name = colorDto.name;
+    await this.colorRepository.save(existColor);
+    return existColor;
+  }
+
+  public async getColor(id: string): Promise<Color> {
+    return await this.colorRepository.findOne(id);
+  }
 }

@@ -1,4 +1,16 @@
-import { Body, ConflictException, Controller, Delete, Get, Inject, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { Color } from '../../entities/color.entity';
 import { IColorService } from '../intefaces/color_service.interface';
@@ -31,6 +43,16 @@ export class ColorController {
   }
 
   /**
+   * Get color by id
+   * @param id Id of color
+   * @returns {Promise<Color[]>} Asynchronously returns color by id
+   */
+  @Get('/:id')
+  public async getColor(@Param('id')id: string): Promise<Color> {
+    return await this.colorService.getColor(id);
+  }
+
+  /**
    * Create color in our system
    * @param colorDto Data transfer object about creation color in our system
    * @return {Promise<Color>} Return asynchronously created color
@@ -42,6 +64,17 @@ export class ColorController {
     return await this.colorService.createColor(colorDto);
   }
 
+  /**
+   * Update color by id
+   * @param id Id of updated color
+   * @param colorDto Data transfer object
+   */
+  @Put('/:id')
+  @Roles('Admin')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  public async updateColor(@Param('id')id: string, @Body()colorDto: ColorDto): Promise<Color> {
+    return await this.colorService.updateColor(id, colorDto);
+  }
 
   /**
    * Delete color in our system
