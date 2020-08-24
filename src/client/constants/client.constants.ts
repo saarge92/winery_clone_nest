@@ -1,1 +1,2 @@
 export const PRODUCER_SERVICE = 'PRODUCER_SERVICE';
+export const COLOR_SERVICE = 'COLOR_SERVICE';
