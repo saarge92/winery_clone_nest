@@ -4,12 +4,11 @@ import { ProducerEntity } from '../../../src/entities/producer.entity';
 import { TestingModule, Test } from '@nestjs/testing';
 import { ClientProvider } from '../../../src/client/client.provider';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { PRODUCER_SERVICE } from '../../../src/client/constants/client.constants';
 import { connectionName, connectionParameters } from '../../connections/connection';
 import { ProducerService } from '../../../src/client/services/producer.service';
-import { ClientModule } from '../../../src/client/client.module';
 import * as fakerStatic from 'faker';
 import { Color } from '../../../src/entities/color.entity';
+
 
 describe('Product Service test', () => {
   let producerService: IProducerService;
@@ -19,9 +18,8 @@ describe('Product Service test', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot({
         ...connectionParameters,
-        entities: [ProducerEntity, Color],
+        entities: [ProducerEntity],
       }),
-        ClientModule,
       ],
       providers: [
         ...ClientProvider,
@@ -35,8 +33,8 @@ describe('Product Service test', () => {
         },
       ],
     }).compile();
-    producerService = module.get<ProducerService>(PRODUCER_SERVICE);
     producerRepository = getRepository(ProducerEntity);
+    producerService = new ProducerService(producerRepository);
   });
 
   it('Should return created producer', async () => {
