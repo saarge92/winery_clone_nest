@@ -1,8 +1,9 @@
 import { Provider } from '@nestjs/common';
-import { COLOR_SERVICE, COUNTRY_SERVICE, PRODUCER_SERVICE } from './constants/client.constants';
+import { COLOR_SERVICE, COUNTRY_SERVICE, PRODUCER_SERVICE, SWEET_SERVICE } from './constants/client.constants';
 import { ProducerService } from './services/producer.service';
 import { ColorService } from './services/color.service';
 import { CountryService } from './services/country.service';
+import { SweetService } from './services/sweet.service';
 
 export const ClientProvider: Provider[] = [
   {
@@ -16,5 +17,9 @@ export const ClientProvider: Provider[] = [
   {
     provide: COUNTRY_SERVICE,
     useClass: CountryService,
+  },
+  {
+    provide: SWEET_SERVICE,
+    useClass: SweetService,
   },
 ];

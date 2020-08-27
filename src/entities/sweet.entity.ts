@@ -7,24 +7,18 @@ import {
   UpdateDateColumn,
 } from 'typeorm/index';
 
-@Entity({ name: 'users' })
-export class User {
+@Entity({ name: 'sweets' })
+export class Sweet {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', nullable: false, unique: true })
-  email: string;
-
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', length: 255, nullable: false, primary: false })
   name: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  password: string;
-
-  @CreateDateColumn()
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @DeleteDateColumn()

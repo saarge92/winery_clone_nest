@@ -9,14 +9,16 @@ import { ColorController } from './controllers/color.controller';
 import { Color } from '../entities/color.entity';
 import { Country } from '../entities/country.entity';
 import { CountryController } from './controllers/country.controller';
+import { Sweet } from '../entities/sweet.entity';
+import { SweetController } from './controllers/sweet.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProducerEntity, Color, Country]),
+  imports: [TypeOrmModule.forFeature([ProducerEntity, Color, Country, Sweet]),
     ConfigModule,
     AuthModule,
   ],
   providers: [...ClientProvider],
-  controllers: [ProducerController, ColorController, CountryController],
+  controllers: [ProducerController, ColorController, CountryController, SweetController],
 })
 export class ClientModule {
 }
