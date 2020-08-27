@@ -7,14 +7,16 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { ColorController } from './controllers/color.controller';
 import { Color } from '../entities/color.entity';
+import { Country } from '../entities/country.entity';
+import { CountryController } from './controllers/country.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProducerEntity, Color]),
+  imports: [TypeOrmModule.forFeature([ProducerEntity, Color, Country]),
     ConfigModule,
     AuthModule,
   ],
   providers: [...ClientProvider],
-  controllers: [ProducerController, ColorController],
+  controllers: [ProducerController, ColorController, CountryController],
 })
 export class ClientModule {
 }

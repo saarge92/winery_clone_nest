@@ -5,7 +5,6 @@ import { IProducerService } from '../intefaces/producer_service.interface';
 import { PRODUCER_SERVICE } from '../constants/client.constants';
 import { Request } from 'express';
 import { Roles } from '../../auth/decorators/role.decorator';
-import { JwtStrategy } from '../../auth/strategies/jwt.strategy';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
 

@@ -46,7 +46,7 @@ export class ColorService implements IColorService {
     const existColor = await this.colorRepository.delete(id);
     if (!existColor)
       throw new ConflictException('Такой цвет не найден в системе');
-    await this.colorRepository.delete({ id });
+    await this.colorRepository.softDelete({ id });
   }
 
   /**

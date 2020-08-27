@@ -10,10 +10,10 @@ export class ProducerEntity {
   @Column({ type: 'varchar', length: 255, nullable: false })
   name: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @DeleteDateColumn()
