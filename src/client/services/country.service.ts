@@ -58,7 +58,14 @@ export class CountryService implements ICountryInterface {
     return country;
   }
 
+  /**
+   * Delete country by id
+   * @param id Id of deleting country
+   */
   public async deleteCountry(id: string) {
+    const country = await this.countryRepository.findOne(id);
+    if (!country)
+      throw new ConflictException('Страна с таким id отсутствует');
     await this.countryRepository.softDelete({ id });
   }
 

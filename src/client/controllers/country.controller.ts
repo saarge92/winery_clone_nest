@@ -48,7 +48,14 @@ export class CountryController {
     return await this.countryService.getCountry(id);
   }
 
+  /**
+   * Удаление страны из базы данных
+   * @param id Id удаляемой страны
+   * @param response Ответ в формате json об успешном удалении объекта
+   */
   @Delete('/:id')
+  @Roles('Admin')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async deleteCountry(@Param('id')id: string, @Res()response: Response) {
     await this.countryService.deleteCountry(id);
     return response.json({
