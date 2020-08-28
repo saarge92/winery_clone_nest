@@ -39,4 +39,20 @@ describe('Color Service test', () => {
 
     expect(true).toBe(createdColor instanceof Color);
   });
+
+  it('Should return list of colors', async function() {
+    const list = await colorService.getList(10, 1);
+    expect(list).toBeDefined();
+  });
+
+  it('Should return color by id', async () => {
+    const randomRecord = await colorRepository.createQueryBuilder()
+      .orderBy('RAND()').getOne();
+    expect(randomRecord).toBeDefined();
+    expect(true).toBe(randomRecord instanceof Color);
+
+    const colorById = await colorService.getColor(randomRecord.id);
+    expect(colorById).toBeDefined();
+    expect(true).toBe(colorById instanceof Color);
+  });
 });
