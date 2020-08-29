@@ -11,14 +11,17 @@ import { Country } from '../entities/country.entity';
 import { CountryController } from './controllers/country.controller';
 import { Sweet } from '../entities/sweet.entity';
 import { SweetController } from './controllers/sweet.controller';
+import { Vine } from '../entities/vine.entity';
+import { VineController } from './controllers/vine.controller';
+import { FileService } from '../shared/services/file.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProducerEntity, Color, Country, Sweet]),
+  imports: [TypeOrmModule.forFeature([ProducerEntity, Color, Country, Sweet, Vine]),
     ConfigModule,
     AuthModule,
   ],
-  providers: [...ClientProvider],
-  controllers: [ProducerController, ColorController, CountryController, SweetController],
+  providers: [...ClientProvider, FileService],
+  controllers: [ProducerController, ColorController, CountryController, SweetController, VineController],
 })
 export class ClientModule {
 }
