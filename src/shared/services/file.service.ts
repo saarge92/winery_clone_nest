@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fileSystem from 'fs';
+import { join } from 'path';
 
 /**
  * File service for saving file on server
@@ -10,11 +11,11 @@ export class FileService {
 
   /**
    * Save file in the directory
-   * @param directory Direrctory for save
+   * @param directory Directory for save
    * @param file File for save
    */
   public async saveFile(directory: string, file: any): Promise<void> {
-    const pathForSave = 'src/' + directory;
+    const pathForSave = join(process.cwd(), directory);
     const filestream = fileSystem.createWriteStream(pathForSave);
     filestream.write(Buffer.from(file.buffer));
     filestream.end();
