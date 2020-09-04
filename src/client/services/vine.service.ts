@@ -28,6 +28,7 @@ export class VineService implements IVineService {
     await this.checkRulesValidationRules(vineDto);
     this.initParamsForVine(newVine, vineDto);
     await this.saveFileForVine(file, newVine);
+    newVine.is_coravin = false;
     await this.vineRepository.save(newVine);
     return newVine;
   }
@@ -38,7 +39,7 @@ export class VineService implements IVineService {
    * @param vine Vine instance for saving image path
    */
   private async saveFileForVine(file: any, vine: Vine) {
-    const pathForSave = '../public/vines/';
+    const pathForSave = 'public/vines/';
     const generatedNewNameFile = await this.fileService.generateFileName(file.originalname);
     const fullPath = pathForSave + generatedNewNameFile;
     await this.fileService.saveFile(fullPath, file);

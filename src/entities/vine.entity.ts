@@ -145,7 +145,7 @@ export class Vine {
   @Column({ name: 'image_src', width: 255, nullable: true })
   image_src: string;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   is_coravin: boolean;
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
