@@ -6,7 +6,7 @@ import { ColorDto } from '../dto/color.dto';
 import { ConflictException } from '@nestjs/common';
 
 /**
- * Service containing business logic of color service
+ * Service containing business logic of color services
  * @author Serdar Durdyev
  */
 export class ColorService implements IColorService {

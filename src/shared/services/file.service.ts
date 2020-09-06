@@ -3,7 +3,7 @@ import * as fileSystem from 'fs';
 import { join } from 'path';
 
 /**
- * File service for saving file on server
+ * File services for saving file on server
  * @author Serdar Durdyev
  */
 @Injectable()

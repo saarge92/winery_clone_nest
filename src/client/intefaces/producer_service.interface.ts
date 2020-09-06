@@ -3,7 +3,7 @@ import { ProducerEntity } from '../../entities/producer.entity';
 import { ProducerDto } from '../dto/producer.dto';
 
 /**
- * Interface which defines business logic of producer service
+ * Interface which defines business logic of producer services
  * Contains basic methods for ProducerService class
  *
  * @author Serdar Durdyev
